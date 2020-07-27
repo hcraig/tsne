@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Naturalist Texts (t-SNE)</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.4/d3.js"></script>
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet"> 
+		<style type="text/css">
+			
+			h1 {
+				font-family: 'Open Sans', sans-serif;
+				color:#353536;
+			}
+			
+			body {
+				background-color:#f2f2f2;
+			}
+			
+			p {
+				font-family: 'Open Sans', sans-serif;
+				color:#353536;
+			}
+			
+			p#second {
+				font-family: 'Open Sans', sans-serif;
+				font-size:12px;
+				margin: 0;
+				line-height: 0px;
+				font-weight:300;
+				color:#353536;
+			}
+			
+			p#third {
+				font-family: 'Open Sans', sans-serif;
+				font-size:10px;
+				color:#353536;
+			}
+			
+			#tooltip.hidden {
+				display: none;
+			}
+
+			#tooltip {
+				position: absolute;
+				width: 170px;
+				height: 65px;
+				padding: 5px;
+				background-color: white;
+				border: solid gray 1px;
+				pointer-events: none; 
+				z-index:10;
+			}
+			
+			#divlegend {
+				width:200px;
+				height:220px;
+				background-color:white;
+				margin-left:50px;
+				margin-top:178px;
+				position:absolute;
+				border:.2px;
+				border-style: solid;
+				border-color:#cecece;
+				z-index:-20;
+			}
+			
+			.l {
+				font-size:14px; 
+				padding-left:50px; 
+				padding-top:11px; 
+				margin:0px;"
+			}
+			
+			#titles {
+				position:absolute;
+			}
+			
+		</style>
+		</head>
+		<body>
+		<div id="tooltip" class="hidden">
+			<p><span id="value">100</span></p>
+		</div>
+		<div id="titles">
+		<h1 style="text-align: center; padding-left:25px; border:0px; margin:20px 0px 10px 0px;">Naturalist Texts (t-SNE)</h1>
+		<p style="text-align: center;  padding:0px 150px 0px 150px; border:0px; margin:0px;">This visualization illustrates similarity between a selection of naturalist texts. The visualization was created by running TF-IDF (Term Frequency-Inverse Document Frequency) on a set of naturalist texts and then using a machine learning algorithm called t-SNE to reduce the dataset to two dimensions. Proximity indicates similarity between texts.</p>
+		<hr style="text-align: center; width:800px; opacity:.2">
+		</div>
+			<br><br><br>
+		<div id="main">
+			<div id="divlegend">
+			<p class="l" style="padding-top:10px;">Charles Darwin</p>
+			<p class="l">John Muir</p>
+			<p class="l">Ralph Waldo Emerson</p>
+			<p class="l">Henry David Thoreau</p>
+			<p class="l">Erasmus Darwin</p>
+			<p class="l">George Marsh</p>
+			<p class="l">Jacob Joshua Levison</p>
+		</div>
+		<script type="text/javascript">
+			var width = 1200;
+			var height = 1000;
+		
+						var tsne = [
+							[415.98, 911.055, "Charles Darwin", "The Autobiography of Charles Darwin", 1], [724.73, 238.95, "Charles Darwin", "Coral Reefs", 1], [ 737.06, 520.14, "Charles Darwin", "The Descent of Man", 1], [ 925.68, 618.49, "Charles Darwin", "The Different forms of flowers on Plants of the Same Species", 1], [ 945.75, 630.84, "Charles Darwin", "The Effects of Cross and Self-Fertilisation in the Animal Kingdom", 1], [ 672.78, 554.655, "Charles Darwin", "The Expression of the Emotions in Man and Animals", 1],
+							[830.39, 398.12, "Charles Darwin", "The Formation of Vegetable Mould Through the Action of Worms",  1], [ 770.018, 582.03, "Charles Darwin", "The Foundations of Origin of Species",  1], [ 696.005, 332.169, "Charles Darwin", "Geological Observations on South America",  1], [ 873.449, 277.395, "Charles Darwin", "Insectivorous Plants",  1], [ 563.435, 196.98, "Charles Darwin", "Monograph on the Sub-class Cirripedia",  1], [ 571.18, 221.625, "Charles Darwin", "Monograph on the Sub-class Cirripedia Vol 2",  1], [ 618.005, 877.875, "Charles Darwin", "More Letters of Charles Darwin",  1], [ 928.73 , 345.722163, "Charles Darwin", "The Movement and Habits of Climbing Plants",  1], [ 581.365967, 436.533499, "Charles Darwin", "On the Origin of Species",  1],
+						    [760.97 , 515.77, "Charles Darwin", "The Variation of Animals and Plants Under Domestication",  1 ], [ 725.045, 331.455, "Charles Darwin", "Volcanic Islands",  1], [ 641.915, 473.214, "Charles Darwin", "The Voyage of the Beagle",  1], [ 363.34, 271.32, "John Muir", "Cruise of the Revenue-Steamer Corwin in Alaska and the N.W. Arctic Ocean in 1881: Botanical Notes",  2], [ 427.51, 511.78, "John Muir", "My First Summer in the Sierra",  2], [346.475, 407.56, "John Muir", "The Grand Canon of the Colorado",  2], [640.37, 1201.17, "John Muir", "Letters to a Friend",  2], [ 652.415, 624.63, "John Muir", "The Mountains of California",  2], [639.245, 649.968, "John Muir", "Steep Trails", 2],
+						    [287.4, 778.17, "John Muir", "Stickeen",  2 ], [ 357.78, 751.74, "John Muir", "The Story of My Boyhood and Youth",  2], [ 476.645, 459.132, "John Muir", "The Yosemite",  2], [ 411.5, 554.56 , "John Muir", "Travels in Alaska",  2], [ 565.625, 718.035, "Ralph Waldo Emerson", "The Conduct of Life",  3], [ 560.6, 636.85, "Ralph Waldo Emerson", "English Traits",  3], [ 572.165, 719.385, "Ralph Waldo Emerson", "Essays",  3], [ 320.522, 575.56, "Ralph Waldo Emerson", "May-Day, and Other Pieces",  3], [ 622.43, 657.63, "Ralph Waldo Emerson", "Nature",  3],
+						    [319.3, 585.675, "Ralph Waldo Emerson", "Poems",  3], [587.165, 715.155, "Ralph Waldo Emerson", "Representative Men: Seven Lectures",  3], [ 287.93, 758.64, "Henry David Thoreau", "Canoeing in the Wilderness",  4], [416.165, 667.74,  "Henry David Thoreau", "Cape Cod",  4], [ 480.995, 667.11,  "Henry David Thoreau", "A Weekend on the Concord and Merrimack Rivers",  4], [498.245, 616.365,  "Henry David Thoreau", "Excursions",  4], [561.7, 911.85,  "Henry David Thoreau", "Familiar Letters",  4], [327.815, 728.34,  "Henry David Thoreau", "The Maine Woods",  4], [546.82,940.152, "Henry David Thoreau", "A Plea for Captain John Brown",  4], [467.51, 747.21,  "Henry David Thoreau", "Walden, and On The Duty of Civil Disobedience", 4],
+						    [531.665, 706.62,  "Henry David Thoreau", "Walking",  4], [444.035, 638.3,  "Henry David Thoreau", "Wild Apples",  4], [562.2, 466.32, "Erasmus Darwin", "The Botanic Garden, Part 2", 5], [639.87, 437.085, "Erasmus Darwin", "The Botanic Garden",  5], [660.71, 437.025, "Erasmus Darwin", "The Temple of Nature: Or, the Origin of Society",  5], [717.185 , 402.135, "Erasmus Darwin", "Zoonomia: Or the Laws of Organic Life, Vol Vol 2",  5], [715.86, 416.325, "Erasmus Darwin", "Zoonomia: Or the Laws of Organic Life, Vol 1",  5], [655.919, 429.165, "George Marsh", "Earth as Modified by Human Action",  6], [232.00, 592.665, "George Marsh", "The Whelps of the Wolf",  6 ], [472.85, 350.25, "Jacob Joshua Levison", "Studies of Trees",  7],
+						  	[80, 200, null, null, 1], [80, 230, null, null, 2], [80, 260, null, null, 3], [80, 290, null, null, 4], [80, 320, null, null, 5], [80, 350, null, null, 6], [80, 380, null, null, 7]
+						  ];
+	
+			var svg = d3.select("div#main")
+						.append("svg")
+						.attr("width", width)
+						.attr("height", height);
+			svg.selectAll("circle")
+			   .data(tsne)
+			   .enter()
+			   .append("circle")
+			   .attr("fill", "white")
+			   .attr("stroke", "blue")
+			   .attr("stroke", function(d) {
+    				if (d[4] == 1) {
+      					return "#074e67";
+  				  } else if (d[4] == 2) {
+    					return "#dd9933";
+   				  }
+   				  	else if (d[4] == 3) {
+    					return "#052d72";
+   				  }
+   				  	else if (d[4] == 4) {
+    					return "#05878a";
+   				  }
+   				  	else if (d[4] == 5) {
+    					return "#90126f";
+   				  }
+   				  	else if (d[4] == 6) {
+    					return "gray";
+   				  }
+   				  	else if (d[4] == 7) {
+    					return "#030D3B";
+   				  }
+   				  })
+			   .attr("stroke-width", 2)
+			   .attr("cx", function(d) {
+			   		return d[0];
+			   	  })
+			   .attr("cy", function(d) {
+			   		return d[1];
+			      })
+			   .attr("r", 11)
+			   .on("mouseover", function(d) {
+					if (d[0] != 80) {
+						var xPosition = parseFloat(d3.select(this).attr("cx")) + 10;
+						var yPosition = parseFloat(d3.select(this).attr("cy")) - 15;
+						d3.select("#tooltip")
+						.style("left", xPosition + "px")
+						.style("top", yPosition + "px")
+						.select("#value")
+						.html("<p id=\"second\">" + d[2] + "</p2>" + "<br><em><p id=\"third\">" + d[3] + "</p></em>")
+				d3.select("#tooltip").classed("hidden", false);
+				}})
+			
+				.on("mouseout", function() {
+					d3.select("#tooltip").classed("hidden", true);
+				});
+		</script>
+		</div>
+	</body>
+</html>
+
